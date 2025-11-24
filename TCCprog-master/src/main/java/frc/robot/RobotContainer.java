@@ -6,6 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Atirar;
+import frc.robot.commands.AutoFT;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevadorRun;
 import frc.robot.subsystems.DriveTrain;
@@ -16,10 +19,12 @@ import frc.robot.subsystems.Elevador;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+import frc.robot.subsystems.Shooter;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   DriveTrain driveTrain = new DriveTrain();
   Elevador elevador = new Elevador();
+  Shooter shooter = new Shooter();
   
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -36,11 +41,14 @@ public class RobotContainer {
   private void configureBindings() {
 
     driveTrain.setDefaultCommand(new Drive(driveTrain, controller));
+    
     elevador.setDefaultCommand(new ElevadorRun(elevador, controller));
+
+    new JoystickButton(controller, 2).whileTrue(new Atirar(shooter));
   }
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return new AutoFT(driveTrain, 0);
   }
 }

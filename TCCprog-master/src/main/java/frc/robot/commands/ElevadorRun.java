@@ -4,9 +4,6 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevador;
@@ -17,13 +14,7 @@ public class ElevadorRun extends Command {
   
   Elevador elevador;
   PS4Controller controller;
-  double POV = controller.getPOV();
-
-  private SparkMax elevMaster = new SparkMax(5, MotorType.kBrushless);
-  private SparkMax elevSlave = new SparkMax(6, MotorType.kBrushless);
-
-  PIDController elevPidController = new PIDController(0, 0, 0);
-  /** Creates a new ElevadorRun. */
+  double POV;
 
   public ElevadorRun(Elevador elevador, PS4Controller controller) {
     this.elevador = elevador;
@@ -34,7 +25,9 @@ public class ElevadorRun extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    elevador.resetEncoders();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -42,15 +35,15 @@ public class ElevadorRun extends Command {
     POV = controller.getPOV();
 
     if(POV == 0){
-           target = 130; 
+           target = 30; 
       }else if(POV==180){
           target = 0;
       }else if (POV == 90){
-          target = 100;
+          target = 10;
       }else if (POV==270){
-        target=75;
+        target = 20;
       }
-      elevador.run(target);
+      elevador.elevGoToTarget(target);
   }
 
   // Called once the command ends or is interrupted.

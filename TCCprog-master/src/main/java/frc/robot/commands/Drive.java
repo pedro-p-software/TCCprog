@@ -17,7 +17,6 @@ public class Drive extends Command {
     this.controller = controller;
     this.driveTrain = driveTrain;
     addRequirements(driveTrain);
-  
   }
 
   // Called when the command is initially scheduled.

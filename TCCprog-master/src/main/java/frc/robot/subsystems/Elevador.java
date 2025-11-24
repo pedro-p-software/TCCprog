@@ -4,9 +4,10 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -20,14 +21,14 @@ public class Elevador extends SubsystemBase {
 
   private double target;
 
-  private SparkMax elevMaster = new SparkMax(5, MotorType.kBrushless);
-  private SparkMax elevSlave = new SparkMax(6, MotorType.kBrushless);
+  private SparkMax elevMaster = new SparkMax(6, MotorType.kBrushless);
+  private SparkMax elevSlave = new SparkMax(7, MotorType.kBrushless);
 
-  private AbsoluteEncoder masterEncoder;
-  private AbsoluteEncoder slaveEncoder;
+  private RelativeEncoder masterEncoder;
+  private RelativeEncoder slaveEncoder;
 
-  private double posMaster = masterEncoder.getPosition();
-  private double posSLave = -slaveEncoder.getPosition();
+  private double posMaster;
+  private double posSLave;
 
   private PIDController elevPidController = new PIDController(0.01, 0, 0); 
 
@@ -37,16 +38,16 @@ public class Elevador extends SubsystemBase {
     motorMasterConfig.idleMode(IdleMode.kBrake);
     motorMasterConfig.inverted(false);
 
-    elevMaster.configure(motorMasterConfig, com.revrobotics.spark.SparkBase.ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    elevMaster.configure(motorMasterConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
     var motorSlaveConfig = new SparkMaxConfig();
     motorSlaveConfig.idleMode(IdleMode.kBrake);
     motorSlaveConfig.inverted(false);
 
-    elevSlave.configure(motorSlaveConfig, com.revrobotics.spark.SparkBase.ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    elevSlave.configure(motorSlaveConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     
-    masterEncoder = elevMaster.getAbsoluteEncoder();
-    slaveEncoder = elevSlave.getAbsoluteEncoder();
+    masterEncoder = elevMaster.getEncoder();
+    slaveEncoder = elevSlave.getEncoder();
 
   }
 public void run(double speed){
@@ -62,8 +63,12 @@ public void run(double speed){
     return target;
   }
 
+  public void resetEncoders(){
+    slaveEncoder.setPosition(0);
+    masterEncoder.setPosition(0);
+  }
   public double getHeight(){
-    double height = (posMaster + posSLave)/2;
+    double height = (posMaster - posSLave)/2;
     return height;
   }
   public void elevGoToTarget(double target){
@@ -83,6 +88,7 @@ public void run(double speed){
 //    }
 SmartDashboard.putData("PID do Elevador",elevPidController);
 SmartDashboard.putNumber("Encoders position", getHeight());
-   
+    posMaster = masterEncoder.getPosition();
+    posSLave = slaveEncoder.getPosition();
   }
 }
