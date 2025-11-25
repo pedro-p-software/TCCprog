@@ -4,17 +4,20 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoFT extends Command {
   DriveTrain driveTrain;
-  PIDController pidController;
-  /** Creates a new Auto. */
-  public AutoFT(DriveTrain driveTrain,double speed) {
+  double target;
 
+  
+  /** Creates a new Auto. */
+  public AutoFT(DriveTrain driveTrain,double target) {
+    this.driveTrain =driveTrain;
+    this.target=target;
     addRequirements(driveTrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -23,20 +26,23 @@ public class AutoFT extends Command {
   @Override
   public void initialize() {
     driveTrain.resetEncoders();
-    
+    SmartDashboard.putString("Começou?", "Começou!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.driveTrainGoToTarget(driveTrain.getWheelPos()+2);
-
+    driveTrain.driveTrainGoToTarget(target);
+    SmartDashboard.putNumber("target do driveTrain", target);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
-  {}
+  {driveTrain.Drive(0, 0);
+    SmartDashboard.putString("Terminou?", "Terminou!");
+  }
 
   // Returns true when the command should end.
   @Override

@@ -49,6 +49,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new AutoFT(driveTrain, 0);
+    return new AutoFT(driveTrain, 2);
   }
 }
