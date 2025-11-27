@@ -16,6 +16,6 @@ public class WaitnShoot extends SequentialCommandGroup {
   public WaitnShoot(double time, Shooter shooter) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new WaitCommand(time), new AutoShootL2(shooter, 3));
+    addCommands(new WaitCommand(time), new AutoShoot(shooter, 3));
   }
 }

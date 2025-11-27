@@ -11,6 +11,7 @@ import frc.robot.commands.Atirar;
 import frc.robot.commands.AutoFT;
 import frc.robot.commands.AutoL2;
 import frc.robot.commands.AutoL3;
+import frc.robot.commands.AutoRotate;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevadorRun;
 import frc.robot.commands.unAtirar;
@@ -54,6 +55,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new AutoL2(elevador, shooter);
+    return new AutoRotate(driveTrain, 90);
   }
 }

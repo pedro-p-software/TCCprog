@@ -15,7 +15,9 @@ public class AutoL3 extends ParallelCommandGroup {
   /** Creates a new AutoL3. */
   public AutoL3(Elevador elevador, Shooter shooter) {
     
-    addCommands(new AutoElevador(elevador, 7, 30), new WaitnShoot(4, shooter));
+    addCommands(
+      new AutoElevador(elevador, 7, 30), 
+      new WaitnShoot(4, shooter));
   }
 }
 /* Aqui o elevador liga e como o comando é paralelo, executa o do shooter tambem. Enquanto o elevador sobe, o shooter executa o Wait (estimado 4 segundos)

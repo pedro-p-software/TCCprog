@@ -6,6 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -19,15 +22,21 @@ public class DriveTrain extends SubsystemBase {
   private WPI_TalonSRX rightSlave = new WPI_TalonSRX(2);
   private WPI_TalonSRX leftMaster = new WPI_TalonSRX(3);
   private WPI_TalonSRX rightMaster = new WPI_TalonSRX(4);
-  
+
+  AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+
   private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
   
   PIDController driveTrainPidController = new PIDController(0.5, 0, 0);
+
+  PIDController rotationPidController = new PIDController(0.035, 0, 0.0029);
   
   /** Creates a new DriveTrain. */
   public DriveTrain() {
+    SmartDashboard.putData("PID da rotação", rotationPidController);
     SmartDashboard.putData("PID driveTrain", driveTrainPidController);
     driveTrainPidController.setTolerance(0.1);
+    rotationPidController.setTolerance(3);
 
     rightSlave.follow(rightMaster);
     leftSlave.follow(leftMaster);
@@ -49,12 +58,19 @@ public class DriveTrain extends SubsystemBase {
     double wheelPos = (leftMaster.getSelectedSensorPosition()*kConversaoTicksParaM  - rightMaster.getSelectedSensorPosition()*kConversaoTicksParaM)/2;
     return wheelPos;
   }
+
+  public void resetGyro(){
+    gyro.reset();
+  }
   
-  public boolean isAtSetpoint(){
+  public boolean driveIsAtSetpoint(){
     return driveTrainPidController.atSetpoint();
   }
   
-  
+  public boolean rotateIsAtSetpoint(){
+    return rotationPidController.atSetpoint();
+  }
+
   public void resetEncoders(){
     rightMaster.setSelectedSensorPosition(0);
     leftMaster.setSelectedSensorPosition(0);
@@ -67,10 +83,20 @@ public class DriveTrain extends SubsystemBase {
     Drive(-speed, 0);
     SmartDashboard.putNumber("Speed do drivetrain", speed);
   }
+
+  
+  public void driveTrainRotate(double target){
+    rotationPidController.setSetpoint(target);
+    double rotateSpeedNoCap = rotationPidController.calculate(gyro.getAngle());
+    double rotateSpeed = MathUtil.clamp(rotateSpeedNoCap, -0.75, 0.75);
+    Drive(0, rotateSpeed);
+    SmartDashboard.putNumber("Speed de rotação", rotateSpeed);
+  }
   
   @Override
   public void periodic() {
     getWheelPos();
+    SmartDashboard.putNumber("Graus", gyro.getAngle());
     SmartDashboard.putNumber("Coordenada",getWheelPos());
     SmartDashboard.putNumber("left encoder", leftMaster.getSelectedSensorPosition());
     SmartDashboard.putNumber("right encoder", rightMaster.getSelectedSensorPosition());

@@ -26,8 +26,8 @@ public class AutoFT extends Command {
   @Override
   public void initialize() {
     driveTrain.resetEncoders();
-    SmartDashboard.putString("Começou?", "Começou!");
-    SmartDashboard.putString("Terminou?", "Não!");
+    SmartDashboard.putString("Começou o AutoFT?", "Começou!");
+    SmartDashboard.putString("Terminou o AutoFT?", "Não!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,6 +48,6 @@ public class AutoFT extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return driveTrain.isAtSetpoint();
+    return driveTrain.driveIsAtSetpoint();
   }
 }

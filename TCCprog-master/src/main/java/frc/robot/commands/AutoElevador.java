@@ -33,12 +33,15 @@ public class AutoElevador extends Command {
   @Override
   public void execute() {
     elevador.elevGoToTarget(target);
+    if(timer.get()>= 4){
+      target=0;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    target = 0;
   }
 
   // Returns true when the command should end.

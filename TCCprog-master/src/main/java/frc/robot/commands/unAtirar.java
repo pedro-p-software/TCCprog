@@ -29,7 +29,7 @@ public class unAtirar extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.Shoot(0.5);
+    shooter.Shoot(0.75);
   }
 
   // Called once the command ends or is interrupted.
