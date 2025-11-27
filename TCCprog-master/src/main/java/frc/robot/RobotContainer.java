@@ -9,8 +9,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Atirar;
 import frc.robot.commands.AutoFT;
+import frc.robot.commands.AutoL2;
+import frc.robot.commands.AutoL3;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ElevadorRun;
+import frc.robot.commands.unAtirar;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevador;
 /**
@@ -45,10 +48,12 @@ public class RobotContainer {
     elevador.setDefaultCommand(new ElevadorRun(elevador, controller));
 
     new JoystickButton(controller, 2).whileTrue(new Atirar(shooter));
+
+    new JoystickButton(controller, 1).whileTrue(new unAtirar(shooter));
   }
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new AutoFT(driveTrain, 2);
+    return new AutoL2(elevador, shooter);
   }
 }

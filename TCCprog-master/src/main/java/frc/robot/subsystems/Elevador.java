@@ -88,6 +88,7 @@ public void run(double speed){
 //    }
 SmartDashboard.putData("PID do Elevador",elevPidController);
 SmartDashboard.putNumber("Encoders position", getHeight());
+SmartDashboard.putNumber("Setpoint do elevador", elevPidController.getSetpoint());
     posMaster = masterEncoder.getPosition();
     posSLave = slaveEncoder.getPosition();
   }

@@ -26,7 +26,7 @@ public class Drive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.Drive(controller.getLeftY(), controller.getRightX());
+    driveTrain.Drive((controller.getLeftY())*0.5, (controller.getRightX())*0.5);
   }
 
   // Called once the command ends or is interrupted.

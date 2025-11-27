@@ -4,47 +4,27 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevador;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevadorRun extends Command {
-  double target=0;    
-  
+public class AutoDescerElevador extends Command {
+  /** Creates a new AutoDescerElevador. */
   Elevador elevador;
-  PS4Controller controller;
-  double POV;
-
-  public ElevadorRun(Elevador elevador, PS4Controller controller) {
-    this.elevador = elevador;
-    this.controller = controller;
+  public AutoDescerElevador(Elevador elevador) {
+    this.elevador=elevador;
     addRequirements(elevador);
-    
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    elevador.resetEncoders();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    POV = controller.getPOV();
-
-    if(POV == 0){
-           target = 30; 
-      }else if(POV==180){
-          target = 0;
-      }else if (POV == 90){
-          target = 10;
-      }else if (POV==270){
-        target = 20;
-      }
-      elevador.elevGoToTarget(target);
-      
+    elevador.elevGoToTarget(0);
   }
 
   // Called once the command ends or is interrupted.
@@ -54,6 +34,6 @@ public class ElevadorRun extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return elevador.getHeight()==0;
   }
 }

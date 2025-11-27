@@ -15,16 +15,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DriveTrain extends SubsystemBase {
   double kConversaoTicksParaM= 0.00011688933603688586170451827431929;
   
-  private WPI_TalonSRX rightMaster = new WPI_TalonSRX(4);
+  private WPI_TalonSRX leftSlave = new WPI_TalonSRX(1);//oi
   private WPI_TalonSRX rightSlave = new WPI_TalonSRX(2);
   private WPI_TalonSRX leftMaster = new WPI_TalonSRX(3);
-  private WPI_TalonSRX leftSlave = new WPI_TalonSRX(1);//oi
+  private WPI_TalonSRX rightMaster = new WPI_TalonSRX(4);
   
   private DifferentialDrive diffDrive = new DifferentialDrive(leftMaster, rightMaster);
   
-  PIDController driveTrainPidController = new PIDController(0.01, 0, 0);
-  
-  private double wheelPos;
+  PIDController driveTrainPidController = new PIDController(0.5, 0, 0);
   
   /** Creates a new DriveTrain. */
   public DriveTrain() {
@@ -39,8 +37,8 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.setInverted(true);
     rightSlave.setInverted(false);
     
-    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 1, 20);
-    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 1, 20);
+    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 20);
+    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 20);
   }
   
   public void Drive(double speed, double rotation){
@@ -64,16 +62,18 @@ public class DriveTrain extends SubsystemBase {
   
   public void driveTrainGoToTarget(double target){
     driveTrainPidController.setSetpoint(target);
-    double speedPorPosAtual = driveTrainPidController.calculate(wheelPos);
-    double speed = MathUtil.clamp(speedPorPosAtual, -0.5, 0.5);
-    Drive(speed, 0);
+    double speedPorPosAtual = driveTrainPidController.calculate(getWheelPos());
+    double speed = MathUtil.clamp(speedPorPosAtual, -0.75, 0.75);
+    Drive(-speed, 0);
     SmartDashboard.putNumber("Speed do drivetrain", speed);
   }
   
   @Override
   public void periodic() {
     getWheelPos();
-    SmartDashboard.putNumber("Coordenada",wheelPos);
+    SmartDashboard.putNumber("Coordenada",getWheelPos());
+    SmartDashboard.putNumber("left encoder", leftMaster.getSelectedSensorPosition());
+    SmartDashboard.putNumber("right encoder", rightMaster.getSelectedSensorPosition());
     SmartDashboard.putBoolean("Ta no setpoint sera", driveTrainPidController.atSetpoint());
     // This method will be called once per scheduler run. sure buddy
   }

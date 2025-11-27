@@ -18,6 +18,7 @@ public class Shooter extends SubsystemBase {
   public void Shoot(double speed){
     shooterMotor.set(speed);
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

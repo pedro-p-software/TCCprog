@@ -6,50 +6,37 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Elevador;
+import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevadorRun extends Command {
-  double target=0;    
-  
-  Elevador elevador;
-  PS4Controller controller;
-  double POV;
+public class unAtirar extends Command {
 
-  public ElevadorRun(Elevador elevador, PS4Controller controller) {
-    this.elevador = elevador;
-    this.controller = controller;
-    addRequirements(elevador);
-    
+  double speed =0;
+
+  PS4Controller controller;
+  Shooter shooter;
+  /** Creates a new Atirar. */
+  public unAtirar(Shooter shooter) {
+    this.shooter = shooter;
+    addRequirements(shooter);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    elevador.resetEncoders();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    POV = controller.getPOV();
-
-    if(POV == 0){
-           target = 30; 
-      }else if(POV==180){
-          target = 0;
-      }else if (POV == 90){
-          target = 10;
-      }else if (POV==270){
-        target = 20;
-      }
-      elevador.elevGoToTarget(target);
-      
+    shooter.Shoot(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooter.Shoot(0);
+  }
 
   // Returns true when the command should end.
   @Override

@@ -1,49 +1,44 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Elevador;
+import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoElevador extends Command {
-  /** Creates a new AutoElevador. */
-  Elevador elevador;
+public class AutoShootL2 extends Command {
+  /** Creates a new AutoShootL3. */
+  double waitTime;
   Timer timer = new Timer();
-  double maxTime;
-  double target; // L2
-
-  public AutoElevador(Elevador elevador, double maxTime, double target) {
-    this.maxTime=maxTime;
-    this.elevador=elevador;
-    this.target=target;
-    addRequirements(elevador);
+  Shooter shooter;
+  public AutoShootL2(Shooter shooter, double waitTime) {
+    this.waitTime=waitTime;
+    this.shooter=shooter;
+    addRequirements(shooter);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     timer.restart();
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevador.elevGoToTarget(target);
+    shooter.Shoot(-0.75);  
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    shooter.Shoot(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()>=maxTime; // É dado um tempo limite pro elevador não descer enquanto o shooter shoota
+    return timer.get()>=waitTime;
   }
 }

@@ -27,6 +27,7 @@ public class AutoFT extends Command {
   public void initialize() {
     driveTrain.resetEncoders();
     SmartDashboard.putString("Começou?", "Começou!");
+    SmartDashboard.putString("Terminou?", "Não!");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
