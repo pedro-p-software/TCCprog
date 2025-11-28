@@ -35,13 +35,13 @@ public class ElevadorRun extends Command {
     POV = controller.getPOV();
 
     if(POV == 0){
-           target = 30; 
+           target = 35; 
       }else if(POV==180){
           target = 0;
       }else if (POV == 90){
-          target = 10;
+          target = 20;
       }else if (POV==270){
-        target = 20;
+        target = 25;
       }
       elevador.elevGoToTarget(target);
       
