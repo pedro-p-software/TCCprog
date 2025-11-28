@@ -12,7 +12,15 @@ public class Autonomous extends SequentialCommandGroup {
     addCommands(
         new AutoFT(driveTrain, 2), 
         new AutoElevador(elevador, 7, 30));
-        
+        new AutoFT(driveTrain, -2);
+        new AutoRotate(driveTrain, 90);
+        new AutoFT(driveTrain, 2);
+        new AutoRotate(driveTrain, 90);
+        new AutoFT(driveTrain,   1);
+        new AutoRotate(driveTrain, 90);
+        new AutoFT(driveTrain, 2);
+        new AutoRotate(driveTrain, 90);
+        new AutoFT(driveTrain, 2);
       
   }
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Atirar;
+import frc.robot.commands.AutoElevador;
 import frc.robot.commands.AutoFT;
 import frc.robot.commands.AutoL2;
 import frc.robot.commands.AutoL3;
@@ -55,6 +56,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new AutoRotate(driveTrain, 90);
+    return null;
   }
 }
